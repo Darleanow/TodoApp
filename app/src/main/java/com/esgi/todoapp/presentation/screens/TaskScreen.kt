@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.esgi.todoapp.presentation.components.TaskList
 import com.esgi.todoapp.presentation.components.AddTaskDialog
 import com.esgi.todoapp.presentation.components.EditTaskDialog
 import com.esgi.todoapp.presentation.components.TaskList
@@ -23,7 +22,7 @@ import com.esgi.todoapp.presentation.viewmodel.TaskViewModel
 fun TaskScreen(
     viewModel: TaskViewModel = hiltViewModel()
 ) {
-    val tasks by viewModel.tasks.collectAsState()
+    val tasks by viewModel.tasks.collectAsState(initial = emptyList())
     val isAddingTask by viewModel.isAddingTask.collectAsState()
     val selectedTask by viewModel.selectedTask.collectAsState()
 

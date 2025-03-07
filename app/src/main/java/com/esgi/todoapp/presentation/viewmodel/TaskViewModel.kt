@@ -6,8 +6,9 @@ import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.domain.usecase.TaskUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,26 +17,14 @@ class TaskViewModel @Inject constructor(
     private val taskUseCases: TaskUseCases
 ) : ViewModel() {
 
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
+    val tasks: StateFlow<List<Task>> = taskUseCases.getAllTasks()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _isAddingTask = MutableStateFlow(false)
-    val isAddingTask: StateFlow<Boolean> = _isAddingTask.asStateFlow()
+    val isAddingTask: StateFlow<Boolean> = _isAddingTask
 
     private val _selectedTask = MutableStateFlow<Task?>(null)
-    val selectedTask: StateFlow<Task?> = _selectedTask.asStateFlow()
-
-    init {
-        getAllTasks()
-    }
-
-    fun getAllTasks() {
-        viewModelScope.launch {
-            taskUseCases.getAllTasks().collect { taskList ->
-                _tasks.value = taskList
-            }
-        }
-    }
+    val selectedTask: StateFlow<Task?> = _selectedTask
 
     fun onAddTaskClick() {
         _isAddingTask.value = true

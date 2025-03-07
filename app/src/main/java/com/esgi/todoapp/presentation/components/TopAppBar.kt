@@ -22,13 +22,6 @@ fun TopAppBarTask(
             )
         },
         actions = {
-            IconButton(onClick = onAddClick) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Ajouter une tâche"
-                )
-            }
-
             IconButton(onClick = onClearAllClick) {
                 Icon(
                     imageVector = Icons.Default.Delete,

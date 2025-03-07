@@ -43,11 +43,6 @@ fun EditTaskDialog(
                 onValueChange = { title = it },
                 label = { Text("Titre") },
                 singleLine = true,
-                /*colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                    focusedLabelColor = MaterialTheme.colorScheme.primary
-                ),*/
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -57,11 +52,6 @@ fun EditTaskDialog(
                 value = description,
                 onValueChange = { description = it },
                 label = { Text("Description") },
-                /*colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                    focusedLabelColor = MaterialTheme.colorScheme.primary
-                ),*/
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
