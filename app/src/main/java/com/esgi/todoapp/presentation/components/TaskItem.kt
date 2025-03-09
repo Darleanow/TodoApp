@@ -15,13 +15,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.presentation.theme.TaskCompleted
 import com.esgi.todoapp.presentation.theme.TaskPending
+import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,12 +53,22 @@ fun TaskItem(
     )
 
     val dateFormatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+    val statusText = if (task.completed) "Tâche terminée" else "Tâche en cours"
+    val taskContentDescription = "${task.title}. ${statusText}. Créée le ${dateFormatter.format(task.creationDate)}"
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable { onTaskClick(task) },
+            .clickable(
+                role = Role.Button,
+                onClickLabel = "Voir les détails de la tâche ${task.title}"
+            ) {
+                onTaskClick(task)
+            }
+            .semantics {
+                contentDescription = taskContentDescription
+            },
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor
         ),
@@ -68,6 +85,9 @@ fun TaskItem(
                     .size(16.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .background(statusColor)
+                    .semantics {
+                        contentDescription = statusText
+                    }
             )
 
             Column(
@@ -80,7 +100,8 @@ fun TaskItem(
                     style = MaterialTheme.typography.titleMedium,
                     textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.semantics { heading() }
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -103,22 +124,73 @@ fun TaskItem(
             }
 
             Row {
-                IconButton(onClick = { onToggleComplete(task) }) {
+                IconButton(
+                    onClick = { onToggleComplete(task) },
+                    modifier = Modifier.semantics {
+                        contentDescription = if (task.completed)
+                            "Marquer comme non terminée"
+                        else
+                            "Marquer comme terminée"
+                    }
+                ) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = if (task.completed) "Marquer comme non terminée" else "Marquer comme terminée",
+                        contentDescription = null,
                         tint = if (task.completed) TaskCompleted else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
 
-                IconButton(onClick = { onDeleteClick(task) }) {
+                IconButton(
+                    onClick = { onDeleteClick(task) },
+                    modifier = Modifier.semantics {
+                        contentDescription = "Supprimer la tâche ${task.title}"
+                    }
+                ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Supprimer",
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
             }
         }
+    }
+}
+
+@Preview(name = "Task Item (Non complétée)", showBackground = true)
+@Composable
+fun TaskItemPreview() {
+    TodoAppEnzoHugonnierTheme {
+        TaskItem(
+            task = Task(
+                id = 1,
+                title = "Exemple de tâche",
+                description = "Ceci est une description de tâche qui pourrait être assez longue pour être tronquée sur deux lignes maximum.",
+                creationDate = Date(),
+                completed = false
+            ),
+            onTaskClick = {},
+            onToggleComplete = {},
+            onDeleteClick = {}
+        )
+    }
+}
+
+@Preview(name = "Task Item (Complétée)", showBackground = true)
+@Composable
+fun CompletedTaskItemPreview() {
+    TodoAppEnzoHugonnierTheme {
+        TaskItem(
+            task = Task(
+                id = 2,
+                title = "Tâche terminée",
+                description = "Cette tâche est marquée comme terminée.",
+                creationDate = Date(),
+                completed = true
+            ),
+            onTaskClick = {},
+            onToggleComplete = {},
+            onDeleteClick = {}
+        )
     }
 }

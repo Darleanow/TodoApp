@@ -5,13 +5,13 @@ import com.esgi.todoapp.domain.repository.TaskRepository
 import com.esgi.todoapp.domain.util.Result
 import javax.inject.Inject
 
-class UpdateTaskUseCase @Inject constructor(
+class GetTaskByIdUseCase @Inject constructor(
     private val repository: TaskRepository
 ) {
-    suspend operator fun invoke(task: Task): Result<Unit> {
-        if (task.title.isBlank()) {
-            return Result.error("Le titre de la tâche ne peut pas être vide")
+    suspend operator fun invoke(id: Int): Result<Task?> {
+        if (id <= 0) {
+            return Result.error("ID de tâche invalide")
         }
-        return repository.updateTask(task)
+        return repository.getTaskById(id)
     }
 }

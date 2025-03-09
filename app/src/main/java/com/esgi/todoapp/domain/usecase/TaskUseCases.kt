@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 data class TaskUseCases @Inject constructor(
     val getAllTasks: GetAllTasksUseCase,
+    val getTaskById: GetTaskByIdUseCase,
     val addTask: AddTaskUseCase,
     val updateTask: UpdateTaskUseCase,
     val deleteTask: DeleteTaskUseCase,

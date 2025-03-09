@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,27 +16,51 @@ import com.esgi.todoapp.presentation.components.EditTaskDialog
 import com.esgi.todoapp.presentation.components.TaskList
 import com.esgi.todoapp.presentation.components.TopAppBarTask
 import com.esgi.todoapp.presentation.viewmodel.TaskViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreen(
+    navigateToTaskDetail: (Int) -> Unit = {},
     viewModel: TaskViewModel = hiltViewModel()
 ) {
     val tasks by viewModel.tasks.collectAsState(initial = emptyList())
-    val isAddingTask by viewModel.isAddingTask.collectAsState()
-    val selectedTask by viewModel.selectedTask.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    // Gestion des messages de succès/erreur
+    LaunchedEffect(uiState.isSuccess, uiState.errorMessage) {
+        uiState.errorMessage?.let { error ->
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = error,
+                    actionLabel = "OK"
+                )
+                viewModel.clearError()
+            }
+        }
+
+        if (uiState.isSuccess) {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Opération réussie",
+                    actionLabel = "OK"
+                )
+                viewModel.clearSuccess()
+            }
+        }
+    }
 
     // Show dialogs
-    if (isAddingTask) {
+    if (uiState.isAddingTask) {
         AddTaskDialog(
             onDismiss = viewModel::onAddTaskDismiss,
             onConfirm = viewModel::addTask
         )
     }
 
-    selectedTask?.let { task ->
+    uiState.selectedTask?.let { task ->
         EditTaskDialog(
             task = task,
             onDismiss = { viewModel.onTaskSelected(null) },
@@ -48,13 +71,6 @@ fun TaskScreen(
                 viewModel.deleteTask(taskToDelete)
             }
         )
-    }
-
-    // Show error snackbar if there's an error
-    errorMessage?.let { error ->
-        LaunchedEffect(error) {
-            // You can add more advanced error handling here if needed
-        }
     }
 
     Scaffold(
@@ -77,26 +93,7 @@ fun TaskScreen(
             }
         },
         snackbarHost = {
-            errorMessage?.let { error ->
-                Snackbar(
-                    modifier = Modifier.padding(16.dp),
-                    action = {
-                        TextButton(onClick = viewModel::clearError) {
-                            Text("OK")
-                        }
-                    },
-                    dismissAction = {
-                        IconButton(onClick = viewModel::clearError) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Fermer"
-                            )
-                        }
-                    }
-                ) {
-                    Text(text = error)
-                }
-            }
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Box(
@@ -105,7 +102,7 @@ fun TaskScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            if (isLoading) {
+            if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -122,7 +119,14 @@ fun TaskScreen(
             } else {
                 TaskList(
                     tasks = tasks,
-                    onTaskClick = viewModel::onTaskSelected,
+                    onTaskClick = { task ->
+                        // Deux options possibles:
+                        // 1. Ouvrir la boîte de dialogue d'édition (comportement actuel)
+                        viewModel.onTaskSelected(task)
+
+                        // 2. Naviguer vers un écran de détail (nouvelle fonctionnalité)
+                        // navigateToTaskDetail(task.id)
+                    },
                     onToggleComplete = viewModel::toggleTaskCompletion,
                     onDeleteClick = viewModel::deleteTask,
                     contentPadding = PaddingValues(bottom = 80.dp)

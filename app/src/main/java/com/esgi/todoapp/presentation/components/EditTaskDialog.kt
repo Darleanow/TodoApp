@@ -7,9 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.esgi.todoapp.domain.model.Task
+import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,6 +124,27 @@ fun EditTaskDialog(
             ) {
                 Text("Annuler")
             }
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 400)
+@Composable
+fun EditTaskDialogPreview() {
+    TodoAppEnzoHugonnierTheme {
+        Surface {
+            EditTaskDialog(
+                task = Task(
+                    id = 1,
+                    title = "Exemple de tâche",
+                    description = "Description de la tâche",
+                    creationDate = Date(),
+                    completed = false
+                ),
+                onDismiss = {},
+                onConfirm = {},
+                onDelete = {}
+            )
         }
     }
 }
