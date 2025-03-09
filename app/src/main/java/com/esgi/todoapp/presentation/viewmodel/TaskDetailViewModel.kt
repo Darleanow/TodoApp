@@ -123,7 +123,6 @@ class TaskDetailViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Déjà géré au début de la fonction
                 }
             }
         }
