@@ -26,6 +26,12 @@ class TaskViewModel @Inject constructor(
     private val _selectedTask = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> = _selectedTask
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     fun onAddTaskClick() {
         _isAddingTask.value = true
     }
@@ -38,13 +44,21 @@ class TaskViewModel @Inject constructor(
         if (title.isBlank()) return
 
         viewModelScope.launch {
-            taskUseCases.addTask(
-                Task(
-                    title = title,
-                    description = description
+            try {
+                _isLoading.value = true
+                taskUseCases.addTask(
+                    Task(
+                        title = title,
+                        description = description
+                    )
                 )
-            )
-            _isAddingTask.value = false
+                _isAddingTask.value = false
+                _errorMessage.value = null
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur lors de l'ajout de la tâche: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -54,32 +68,68 @@ class TaskViewModel @Inject constructor(
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
-            taskUseCases.updateTask(task)
-            _selectedTask.value = null
+            try {
+                _isLoading.value = true
+                taskUseCases.updateTask(task)
+                _selectedTask.value = null
+                _errorMessage.value = null
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur lors de la mise à jour de la tâche: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
     fun deleteTask(task: Task) {
         viewModelScope.launch {
-            taskUseCases.deleteTask(task)
-            if (_selectedTask.value?.id == task.id) {
-                _selectedTask.value = null
+            try {
+                _isLoading.value = true
+                taskUseCases.deleteTask(task)
+                if (_selectedTask.value?.id == task.id) {
+                    _selectedTask.value = null
+                }
+                _errorMessage.value = null
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur lors de la suppression de la tâche: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
     fun deleteAllTasks() {
         viewModelScope.launch {
-            taskUseCases.deleteAllTasks()
-            _selectedTask.value = null
+            try {
+                _isLoading.value = true
+                taskUseCases.deleteAllTasks()
+                _selectedTask.value = null
+                _errorMessage.value = null
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur lors de la suppression de toutes les tâches: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
     fun toggleTaskCompletion(task: Task) {
         viewModelScope.launch {
-            taskUseCases.updateTask(
-                task.copy(completed = !task.completed)
-            )
+            try {
+                _isLoading.value = true
+                taskUseCases.updateTask(
+                    task.copy(completed = !task.completed)
+                )
+                _errorMessage.value = null
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur lors de la mise à jour de la tâche: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
+    }
+
+    fun clearError() {
+        _errorMessage.value = null
     }
 }

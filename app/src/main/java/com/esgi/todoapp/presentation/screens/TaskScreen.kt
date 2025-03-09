@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +26,10 @@ fun TaskScreen(
     val tasks by viewModel.tasks.collectAsState(initial = emptyList())
     val isAddingTask by viewModel.isAddingTask.collectAsState()
     val selectedTask by viewModel.selectedTask.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
+    // Show dialogs
     if (isAddingTask) {
         AddTaskDialog(
             onDismiss = viewModel::onAddTaskDismiss,
@@ -46,6 +50,13 @@ fun TaskScreen(
         )
     }
 
+    // Show error snackbar if there's an error
+    errorMessage?.let { error ->
+        LaunchedEffect(error) {
+            // You can add more advanced error handling here if needed
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBarTask(
@@ -64,6 +75,28 @@ fun TaskScreen(
                     contentDescription = "Ajouter une tâche"
                 )
             }
+        },
+        snackbarHost = {
+            errorMessage?.let { error ->
+                Snackbar(
+                    modifier = Modifier.padding(16.dp),
+                    action = {
+                        TextButton(onClick = viewModel::clearError) {
+                            Text("OK")
+                        }
+                    },
+                    dismissAction = {
+                        IconButton(onClick = viewModel::clearError) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Fermer"
+                            )
+                        }
+                    }
+                ) {
+                    Text(text = error)
+                }
+            }
         }
     ) { paddingValues ->
         Box(
@@ -72,7 +105,11 @@ fun TaskScreen(
                 .padding(paddingValues)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            if (tasks.isEmpty()) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            } else if (tasks.isEmpty()) {
                 Text(
                     text = "Aucune tâche pour le moment.\nAppuyez sur le bouton + pour en créer une.",
                     style = MaterialTheme.typography.bodyLarge,
