@@ -16,8 +16,14 @@ object Constants {
     // Animation durations
     const val ANIMATION_DURATION_SHORT = 300
 
+    // Task validation constraints
+    const val MAX_TITLE_LENGTH = 50
+    const val MAX_DESCRIPTION_LENGTH = 500
+
     // Error messages
     const val ERROR_EMPTY_TITLE = "Le titre de la tâche ne peut pas être vide"
+    const val ERROR_TITLE_TOO_LONG = "Le titre ne peut pas dépasser 50 caractères"
+    const val ERROR_DESCRIPTION_TOO_LONG = "La description ne peut pas dépasser 500 caractères"
     const val ERROR_INVALID_ID = "ID de tâche invalide"
     const val ERROR_GENERIC = "Une erreur est survenue"
 }

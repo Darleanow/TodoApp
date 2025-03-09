@@ -10,6 +10,15 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 
+/**
+ * Top app bar component for the task screen.
+ * Displays the title with a count of tasks and action buttons for adding and clearing tasks.
+ * Uses semantic properties to improve accessibility.
+ *
+ * @param onAddClick Function to call when the add button is clicked
+ * @param onClearAllClick Function to call when the clear all button is clicked
+ * @param taskCount The number of tasks to display in the title
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarTask(

@@ -34,6 +34,19 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Composable for displaying a single task item in the task list.
+ * Features animated color transitions based on completion status,
+ * displays task details (title, description, creation date),
+ * and provides buttons for completing and deleting tasks.
+ * Accessibility is enhanced with semantic properties.
+ *
+ * @param task The task to display
+ * @param onTaskClick Function to call when the task card is clicked
+ * @param onToggleComplete Function to call when the completion status is toggled
+ * @param onDeleteClick Function to call when the delete button is clicked
+ * @param modifier Modifier to be applied to the card
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(
@@ -160,6 +173,9 @@ fun TaskItem(
     }
 }
 
+/**
+ * Preview for an uncompleted task item.
+ */
 @Preview(name = "Task Item (Non complétée)", showBackground = true)
 @Composable
 fun TaskItemPreview() {
@@ -179,6 +195,9 @@ fun TaskItemPreview() {
     }
 }
 
+/**
+ * Preview for a completed task item.
+ */
 @Preview(name = "Task Item (Complétée)", showBackground = true)
 @Composable
 fun CompletedTaskItemPreview() {

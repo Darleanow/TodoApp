@@ -7,6 +7,10 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+/**
+ * The dark color scheme configuration for the application.
+ * Defines all the colors used in dark mode.
+ */
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
     secondary = DarkSecondary,
@@ -20,6 +24,10 @@ private val DarkColorScheme = darkColorScheme(
     onError = Color.White
 )
 
+/**
+ * The light color scheme configuration for the application.
+ * Defines all the colors used in light mode.
+ */
 private val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
     secondary = LightSecondary,
@@ -33,6 +41,14 @@ private val LightColorScheme = lightColorScheme(
     onError = Color.White
 )
 
+/**
+ * Main theme composable function for the application.
+ * Applies color scheme, typography and other theme elements.
+ *
+ * @param darkTheme Whether to use dark theme colors, defaults to system setting
+ * @param dynamicColor Whether to use dynamic colors (not implemented in this app)
+ * @param content The content to be themed
+ */
 @Composable
 fun TodoAppEnzoHugonnierTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

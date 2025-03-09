@@ -15,7 +15,13 @@ import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
 import com.esgi.todoapp.util.Constants.PADDING_EXTRA_LARGE
 import com.esgi.todoapp.util.Constants.PADDING_LARGE
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Composable dialog for adding a new task.
+ * Provides input fields for the task title and description and buttons for confirmation or dismissal.
+ *
+ * @param onDismiss Function to call when the dialog is dismissed
+ * @param onConfirm Function to call when a task is confirmed, passing the title and description
+ */
 @Composable
 fun AddTaskDialog(
     onDismiss: () -> Unit,
@@ -85,6 +91,9 @@ fun AddTaskDialog(
     }
 }
 
+/**
+ * Preview for the AddTaskDialog composable.
+ */
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun AddTaskDialogPreview() {

@@ -19,7 +19,16 @@ import com.esgi.todoapp.util.Constants.PADDING_LARGE
 import com.esgi.todoapp.util.Constants.PADDING_MEDIUM
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Dialog component for editing an existing task.
+ * Allows the user to modify the title, description, and completion status of a task.
+ * Also provides buttons to save changes, delete the task, or cancel the operation.
+ *
+ * @param task The task to be edited
+ * @param onDismiss Function to call when the dialog is dismissed
+ * @param onConfirm Function to call when changes are confirmed, passing the updated task
+ * @param onDelete Function to call when the delete button is clicked, passing the task to delete
+ */
 @Composable
 fun EditTaskDialog(
     task: Task,
@@ -141,6 +150,10 @@ fun EditTaskDialog(
     }
 }
 
+/**
+ * Preview for the EditTaskDialog composable.
+ * Shows how the dialog appears with a sample task.
+ */
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun EditTaskDialogPreview() {

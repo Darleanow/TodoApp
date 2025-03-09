@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
  */
 interface TaskRepository {
     /**
-     * Gets a Flow of all tasks in the database.
-     * @return Flow emitting lists of tasks when the data changes.
+     * Gets a Flow of all tasks in the database wrapped in Result.
+     * @return Flow emitting Result containing lists of tasks when the data changes.
      */
-    fun getAllTasks(): Flow<List<Task>>
+    fun getAllTasks(): Flow<Result<List<Task>>>
 
     /**
      * Gets a task by its unique identifier.

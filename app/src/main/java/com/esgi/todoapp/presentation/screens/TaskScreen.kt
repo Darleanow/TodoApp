@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreen(
-    navigateToTaskDetail: (Int) -> Unit = {},
     viewModel: TaskViewModel = hiltViewModel()
 ) {
     val tasks by viewModel.tasks.collectAsState(initial = emptyList())
