@@ -3,6 +3,7 @@ package com.esgi.todoapp.domain.usecase
 import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.domain.repository.TaskRepository
 import com.esgi.todoapp.domain.util.Result
+import com.esgi.todoapp.util.Constants.ERROR_EMPTY_TITLE
 import javax.inject.Inject
 
 class AddTaskUseCase @Inject constructor(
@@ -10,7 +11,7 @@ class AddTaskUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(task: Task): Result<Unit> {
         if (task.title.isBlank()) {
-            return Result.error("Le titre de la tâche ne peut pas être vide")
+            return Result.error(ERROR_EMPTY_TITLE)
         }
         return repository.insertTask(task)
     }

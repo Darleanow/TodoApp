@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.esgi.todoapp.domain.model.Task
+import com.esgi.todoapp.util.Constants.PADDING_LARGE
+import com.esgi.todoapp.util.Constants.PADDING_MEDIUM
+import com.esgi.todoapp.util.Constants.PADDING_SMALL
 
 @Composable
 fun TaskList(
@@ -20,29 +22,27 @@ fun TaskList(
     onDeleteClick: (Task) -> Unit,
     contentPadding: PaddingValues
 ) {
-    // Utilisation de remember et derivedStateOf pour éviter les recompositions inutiles
+
     val sortedTasks = remember(tasks) {
-        derivedStateOf {
-            tasks.sortedByDescending { it.creationDate }
-        }
+        tasks.sortedByDescending { it.creationDate }
     }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        contentPadding = PaddingValues(horizontal = PADDING_LARGE.dp, vertical = PADDING_MEDIUM.dp)
     ) {
         items(
-            items = sortedTasks.value,
-            key = { task -> task.id } // Utilisation de clés pour améliorer les performances
+            items = sortedTasks,
+            key = { task -> task.id }
         ) { task ->
             TaskItem(
                 task = task,
                 onTaskClick = onTaskClick,
                 onToggleComplete = onToggleComplete,
                 onDeleteClick = onDeleteClick,
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = PADDING_SMALL.dp)
             )
         }
     }

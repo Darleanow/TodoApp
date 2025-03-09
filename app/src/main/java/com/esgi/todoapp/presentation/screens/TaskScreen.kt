@@ -16,6 +16,7 @@ import com.esgi.todoapp.presentation.components.EditTaskDialog
 import com.esgi.todoapp.presentation.components.TaskList
 import com.esgi.todoapp.presentation.components.TopAppBarTask
 import com.esgi.todoapp.presentation.viewmodel.TaskViewModel
+import com.esgi.todoapp.util.Constants.PADDING_LARGE
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +30,6 @@ fun TaskScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    // Gestion des messages de succès/erreur
     LaunchedEffect(uiState.isSuccess, uiState.errorMessage) {
         uiState.errorMessage?.let { error ->
             scope.launch {
@@ -52,7 +52,6 @@ fun TaskScreen(
         }
     }
 
-    // Show dialogs
     if (uiState.isAddingTask) {
         AddTaskDialog(
             onDismiss = viewModel::onAddTaskDismiss,
@@ -114,18 +113,13 @@ fun TaskScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(16.dp)
+                        .padding(PADDING_LARGE.dp)
                 )
             } else {
                 TaskList(
                     tasks = tasks,
                     onTaskClick = { task ->
-                        // Deux options possibles:
-                        // 1. Ouvrir la boîte de dialogue d'édition (comportement actuel)
                         viewModel.onTaskSelected(task)
-
-                        // 2. Naviguer vers un écran de détail (nouvelle fonctionnalité)
-                        // navigateToTaskDetail(task.id)
                     },
                     onToggleComplete = viewModel::toggleTaskCompletion,
                     onDeleteClick = viewModel::deleteTask,

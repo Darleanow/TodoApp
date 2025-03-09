@@ -10,9 +10,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.esgi.todoapp.domain.model.Task
+import com.esgi.todoapp.util.Constants.PADDING_MEDIUM
 import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
-import java.util.Date
+import com.esgi.todoapp.util.Constants.PADDING_EXTRA_LARGE
+import com.esgi.todoapp.util.Constants.PADDING_LARGE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,9 +27,9 @@ fun AddTaskDialog(
     Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(PADDING_LARGE.dp))
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(24.dp)
+                .padding(PADDING_EXTRA_LARGE.dp)
         ) {
             Text(
                 text = "Ajouter une tâche",
@@ -36,7 +37,7 @@ fun AddTaskDialog(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(PADDING_LARGE.dp))
 
             OutlinedTextField(
                 value = title,
@@ -46,7 +47,7 @@ fun AddTaskDialog(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(PADDING_LARGE.dp))
 
             OutlinedTextField(
                 value = description,
@@ -57,7 +58,7 @@ fun AddTaskDialog(
                     .height(120.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(PADDING_EXTRA_LARGE.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -67,7 +68,7 @@ fun AddTaskDialog(
                     Text("Annuler")
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(PADDING_MEDIUM.dp))
 
                 Button(
                     onClick = {

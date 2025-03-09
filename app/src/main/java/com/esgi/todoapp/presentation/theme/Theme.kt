@@ -7,7 +7,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Couleurs pour le thème sombre
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
     secondary = DarkSecondary,
@@ -21,7 +20,6 @@ private val DarkColorScheme = darkColorScheme(
     onError = Color.White
 )
 
-// Nouvelles couleurs pour le thème clair
 private val LightColorScheme = lightColorScheme(
     primary = LightPrimary,
     secondary = LightSecondary,

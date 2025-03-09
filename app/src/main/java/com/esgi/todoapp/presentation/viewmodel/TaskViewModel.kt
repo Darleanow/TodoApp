@@ -1,5 +1,6 @@
 package com.esgi.todoapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esgi.todoapp.domain.model.Task
@@ -20,7 +21,6 @@ class TaskViewModel @Inject constructor(
     private val taskUseCases: TaskUseCases
 ) : ViewModel() {
 
-    // État UI
     data class UiState(
         val isLoading: Boolean = false,
         val isAddingTask: Boolean = false,
@@ -33,9 +33,12 @@ class TaskViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     val tasks: StateFlow<List<Task>> = taskUseCases.getAllTasks()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
 
-    // Actions UI
     fun onAddTaskClick() {
         _uiState.value = _uiState.value.copy(isAddingTask = true)
     }
@@ -56,7 +59,6 @@ class TaskViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isSuccess = false)
     }
 
-    // Opérations de tâches
     fun addTask(title: String, description: String) {
         if (title.isBlank()) return
 
@@ -81,11 +83,11 @@ class TaskViewModel @Inject constructor(
                 is Result.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = result.message
+                        errorMessage = "Erreur lors de l'ajout de la tâche: ${result.message}"
                     )
+                    Log.e("TaskViewModel", "Erreur lors de l'ajout de la tâche", result.exception)
                 }
                 is Result.Loading -> {
-                    // Géré par l'état isLoading initial
                 }
             }
         }
@@ -111,7 +113,6 @@ class TaskViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Géré par l'état isLoading initial
                 }
             }
         }
@@ -137,7 +138,6 @@ class TaskViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Géré par l'état isLoading initial
                 }
             }
         }
@@ -163,7 +163,6 @@ class TaskViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Géré par l'état isLoading initial
                 }
             }
         }
@@ -188,7 +187,6 @@ class TaskViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Géré par l'état isLoading initial
                 }
             }
         }

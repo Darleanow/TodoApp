@@ -17,7 +17,6 @@ class TaskDetailViewModel @Inject constructor(
     private val taskUseCases: TaskUseCases
 ) : ViewModel() {
 
-    // État UI pour l'écran de détail
     data class UiState(
         val task: Task? = null,
         val isLoading: Boolean = false,
@@ -29,7 +28,6 @@ class TaskDetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState(isLoading = true))
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    // Charger une tâche spécifique
     fun loadTask(taskId: Int) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -49,13 +47,11 @@ class TaskDetailViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Déjà géré au début de la fonction
                 }
             }
         }
     }
 
-    // Mettre à jour une tâche
     fun updateTask(task: Task) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -77,13 +73,11 @@ class TaskDetailViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Déjà géré au début de la fonction
                 }
             }
         }
     }
 
-    // Supprimer une tâche
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -104,13 +98,11 @@ class TaskDetailViewModel @Inject constructor(
                     )
                 }
                 is Result.Loading -> {
-                    // Déjà géré au début de la fonction
                 }
             }
         }
     }
 
-    // Basculer l'état d'achèvement d'une tâche
     fun toggleTaskCompletion(task: Task) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)

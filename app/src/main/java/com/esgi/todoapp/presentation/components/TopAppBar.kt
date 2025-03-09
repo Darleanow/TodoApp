@@ -5,6 +5,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -18,20 +21,33 @@ fun TopAppBarTask(
         title = {
             Text(
                 text = "Mes Tâches ($taskCount)",
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.semantics {
+                    contentDescription = "En-tête: Mes Tâches, $taskCount tâches au total"
+                }
             )
         },
         actions = {
-            IconButton(onClick = onAddClick) {
+            IconButton(
+                onClick = onAddClick,
+                modifier = Modifier.semantics {
+                    contentDescription = "Ajouter une nouvelle tâche"
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Ajouter une tâche"
+                    contentDescription = null
                 )
             }
-            IconButton(onClick = onClearAllClick) {
+            IconButton(
+                onClick = onClearAllClick,
+                modifier = Modifier.semantics {
+                    contentDescription = "Supprimer toutes les tâches"
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Supprimer toutes les tâches"
+                    contentDescription = null
                 )
             }
         },

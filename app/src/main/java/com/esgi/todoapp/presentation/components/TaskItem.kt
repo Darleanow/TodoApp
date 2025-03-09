@@ -27,6 +27,9 @@ import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.presentation.theme.TaskCompleted
 import com.esgi.todoapp.presentation.theme.TaskPending
 import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
+import com.esgi.todoapp.util.Constants.ANIMATION_DURATION_SHORT
+import com.esgi.todoapp.util.Constants.PADDING_LARGE
+import com.esgi.todoapp.util.Constants.PADDING_SMALL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,13 +45,13 @@ fun TaskItem(
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = if (task.completed) TaskCompleted.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surface,
-        animationSpec = tween(300),
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_SHORT),
         label = "background color"
     )
 
     val statusColor by animateColorAsState(
         targetValue = if (task.completed) TaskCompleted else TaskPending,
-        animationSpec = tween(300),
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_SHORT),
         label = "status color"
     )
 
@@ -59,7 +62,7 @@ fun TaskItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = PADDING_SMALL.dp)
             .clickable(
                 role = Role.Button,
                 onClickLabel = "Voir les détails de la tâche ${task.title}"
@@ -72,18 +75,18 @@ fun TaskItem(
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = PADDING_SMALL.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(PADDING_LARGE.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(16.dp)
-                    .clip(RoundedCornerShape(4.dp))
+                    .size(PADDING_LARGE.dp)
+                    .clip(RoundedCornerShape(PADDING_SMALL.dp))
                     .background(statusColor)
                     .semantics {
                         contentDescription = statusText
@@ -93,7 +96,7 @@ fun TaskItem(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = PADDING_LARGE.dp)
             ) {
                 Text(
                     text = task.title,
@@ -104,7 +107,7 @@ fun TaskItem(
                     modifier = Modifier.semantics { heading() }
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(PADDING_SMALL.dp))
 
                 Text(
                     text = task.description,
@@ -114,7 +117,7 @@ fun TaskItem(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(PADDING_SMALL.dp))
 
                 Text(
                     text = "Créée le ${dateFormatter.format(task.creationDate)}",

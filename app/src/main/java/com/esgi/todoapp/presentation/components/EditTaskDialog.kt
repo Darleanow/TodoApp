@@ -7,11 +7,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
+import com.esgi.todoapp.util.Constants.PADDING_EXTRA_LARGE
+import com.esgi.todoapp.util.Constants.PADDING_LARGE
+import com.esgi.todoapp.util.Constants.PADDING_MEDIUM
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,9 +34,9 @@ fun EditTaskDialog(
     Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(PADDING_LARGE.dp))
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(24.dp)
+                .padding(PADDING_EXTRA_LARGE.dp)
         ) {
             Text(
                 text = "Modifier la tâche",
@@ -39,7 +44,7 @@ fun EditTaskDialog(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(PADDING_LARGE.dp))
 
             OutlinedTextField(
                 value = title,
@@ -49,7 +54,7 @@ fun EditTaskDialog(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(PADDING_LARGE.dp))
 
             OutlinedTextField(
                 value = description,
@@ -60,11 +65,11 @@ fun EditTaskDialog(
                     .height(120.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(PADDING_LARGE.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(PADDING_MEDIUM.dp)
             ) {
                 Checkbox(
                     checked = isCompleted,
@@ -81,18 +86,22 @@ fun EditTaskDialog(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(PADDING_EXTRA_LARGE.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(PADDING_MEDIUM.dp)
             ) {
                 OutlinedButton(
                     onClick = { onDelete(task) },
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics {
+                            contentDescription = "Supprimer la tâche"
+                        }
                 ) {
                     Text("Supprimer")
                 }
@@ -110,13 +119,17 @@ fun EditTaskDialog(
                         }
                     },
                     enabled = title.isNotBlank(),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics {
+                            contentDescription = "Enregistrer les modifications"
+                        }
                 ) {
                     Text("Enregistrer")
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(PADDING_MEDIUM.dp))
 
             TextButton(
                 onClick = onDismiss,
