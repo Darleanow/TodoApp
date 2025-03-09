@@ -1,4 +1,5 @@
 package com.esgi.todoapp.domain.model
+
 import java.util.Date
 
 /**

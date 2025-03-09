@@ -32,9 +32,11 @@ class UpdateTaskUseCase @Inject constructor(
             task.title.isBlank() -> {
                 return Result.error(ERROR_EMPTY_TITLE)
             }
+
             task.title.length > MAX_TITLE_LENGTH -> {
                 return Result.error(ERROR_TITLE_TOO_LONG)
             }
+
             task.description.length > MAX_DESCRIPTION_LENGTH -> {
                 return Result.error(ERROR_DESCRIPTION_TOO_LONG)
             }

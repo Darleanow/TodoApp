@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import java.util.Date
+import javax.inject.Inject
 
 /**
  * ViewModel responsible for managing the task list screen UI state and interactions.
@@ -59,6 +59,7 @@ class TaskViewModel @Inject constructor(
                     }
                     emptyList()
                 }
+
                 is Result.Loading -> emptyList()
             }
         }
@@ -143,6 +144,7 @@ class TaskViewModel @Inject constructor(
                         setSuccess(true)
                     }.copy(isAddingTask = false)
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
@@ -150,6 +152,7 @@ class TaskViewModel @Inject constructor(
                     }
                     Log.e("TaskViewModel", "Erreur lors de l'ajout de la tâche", result.exception)
                 }
+
                 is Result.Loading -> {
                 }
             }
@@ -186,12 +189,14 @@ class TaskViewModel @Inject constructor(
                         setSuccess(true)
                     }.copy(selectedTask = null)
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError(result.message)
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }
@@ -212,14 +217,17 @@ class TaskViewModel @Inject constructor(
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setSuccess(true)
-                    }.copy(selectedTask = if (_uiState.value.selectedTask?.id == task.id) null else _uiState.value.selectedTask)
+                    }
+                        .copy(selectedTask = if (_uiState.value.selectedTask?.id == task.id) null else _uiState.value.selectedTask)
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError(result.message)
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }
@@ -240,12 +248,14 @@ class TaskViewModel @Inject constructor(
                         setSuccess(true)
                     }.copy(selectedTask = null)
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError(result.message)
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }
@@ -268,12 +278,14 @@ class TaskViewModel @Inject constructor(
                         setLoading(false)
                     }
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError(result.message)
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }

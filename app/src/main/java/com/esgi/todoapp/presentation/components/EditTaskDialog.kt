@@ -1,10 +1,29 @@
 package com.esgi.todoapp.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
@@ -22,7 +41,6 @@ import com.esgi.todoapp.util.Constants.MAX_TITLE_LENGTH
 import com.esgi.todoapp.util.Constants.PADDING_EXTRA_LARGE
 import com.esgi.todoapp.util.Constants.PADDING_LARGE
 import com.esgi.todoapp.util.Constants.PADDING_MEDIUM
-import com.esgi.todoapp.util.Constants.PADDING_SMALL
 import java.util.Date
 
 /**
@@ -68,7 +86,8 @@ fun EditTaskDialog(
                 value = title,
                 onValueChange = {
                     title = it
-                    titleError = if (title.isEmpty()) "Le titre ne peut pas être vide" else if (title.length > MAX_TITLE_LENGTH) ERROR_TITLE_TOO_LONG else null
+                    titleError =
+                        if (title.isEmpty()) "Le titre ne peut pas être vide" else if (title.length > MAX_TITLE_LENGTH) ERROR_TITLE_TOO_LONG else null
                 },
                 label = { Text("Titre") },
                 singleLine = true,
@@ -91,7 +110,8 @@ fun EditTaskDialog(
                 value = description,
                 onValueChange = {
                     description = it
-                    descriptionError = if (description.length > MAX_DESCRIPTION_LENGTH) ERROR_DESCRIPTION_TOO_LONG else null
+                    descriptionError =
+                        if (description.length > MAX_DESCRIPTION_LENGTH) ERROR_DESCRIPTION_TOO_LONG else null
                 },
                 label = { Text("Description") },
                 modifier = Modifier
@@ -159,8 +179,10 @@ fun EditTaskDialog(
 
                 Button(
                     onClick = {
-                        titleError = if (title.isEmpty()) "Le titre ne peut pas être vide" else if (title.length > MAX_TITLE_LENGTH) ERROR_TITLE_TOO_LONG else null
-                        descriptionError = if (description.length > MAX_DESCRIPTION_LENGTH) ERROR_DESCRIPTION_TOO_LONG else null
+                        titleError =
+                            if (title.isEmpty()) "Le titre ne peut pas être vide" else if (title.length > MAX_TITLE_LENGTH) ERROR_TITLE_TOO_LONG else null
+                        descriptionError =
+                            if (description.length > MAX_DESCRIPTION_LENGTH) ERROR_DESCRIPTION_TOO_LONG else null
 
                         if (titleError == null && descriptionError == null) {
                             onConfirm(

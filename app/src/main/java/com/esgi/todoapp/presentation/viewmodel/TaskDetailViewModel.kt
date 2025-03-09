@@ -70,12 +70,14 @@ class TaskDetailViewModel @Inject constructor(
                         isEditing = false
                     )
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError("Erreur lors de la mise à jour: ${result.message}")
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }
@@ -99,12 +101,14 @@ class TaskDetailViewModel @Inject constructor(
                         setError(null)
                     }.copy(task = null)
                 }
+
                 is Result.Error -> {
                     _uiState.value = _uiState.value.apply {
                         setLoading(false)
                         setError("Erreur lors de la suppression: ${result.message}")
                     }
                 }
+
                 is Result.Loading -> {
                 }
             }

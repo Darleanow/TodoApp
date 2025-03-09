@@ -22,7 +22,10 @@ sealed class Result<out T> {
      * @property exception The exception that caused the failure.
      * @property message A human-readable error message.
      */
-    data class Error(val exception: Exception, val message: String = exception.localizedMessage ?: ERROR_GENERIC) : Result<Nothing>()
+    data class Error(
+        val exception: Exception,
+        val message: String = exception.localizedMessage ?: ERROR_GENERIC
+    ) : Result<Nothing>()
 
     /**
      * Represents an operation in progress.

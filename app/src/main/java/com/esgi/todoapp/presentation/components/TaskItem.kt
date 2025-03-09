@@ -1,25 +1,31 @@
 package com.esgi.todoapp.presentation.components
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -31,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.presentation.theme.TaskCompleted
-import com.esgi.todoapp.presentation.theme.TaskPending
 import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
 import com.esgi.todoapp.util.Constants.ANIMATION_DURATION
 import com.esgi.todoapp.util.Constants.PADDING_LARGE
@@ -75,7 +80,8 @@ fun TaskItem(
 
     val dateFormatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     val statusText = if (task.completed) "Tâche terminée" else "Tâche en cours"
-    val taskContentDescription = "${task.title}. ${statusText}. Créée le ${dateFormatter.format(task.creationDate)}"
+    val taskContentDescription =
+        "${task.title}. ${statusText}. Créée le ${dateFormatter.format(task.creationDate)}"
 
     val scale by animateFloatAsState(
         targetValue = if (task.completed) 1f else 1f,
@@ -174,7 +180,9 @@ fun TaskItem(
                     Icon(
                         imageVector = if (task.completed) Icons.Default.CheckCircle else Icons.Default.Check,
                         contentDescription = null,
-                        tint = if (task.completed) TaskCompleted.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        tint = if (task.completed) TaskCompleted.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.6f
+                        ),
                         modifier = Modifier.scale(if (task.completed) 1.1f else 1f)
                     )
                 }
