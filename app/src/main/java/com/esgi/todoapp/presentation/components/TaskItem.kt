@@ -1,20 +1,26 @@
 package com.esgi.todoapp.presentation.components
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -27,7 +33,7 @@ import com.esgi.todoapp.domain.model.Task
 import com.esgi.todoapp.presentation.theme.TaskCompleted
 import com.esgi.todoapp.presentation.theme.TaskPending
 import com.esgi.todoapp.presentation.theme.TodoAppEnzoHugonnierTheme
-import com.esgi.todoapp.util.Constants.ANIMATION_DURATION_SHORT
+import com.esgi.todoapp.util.Constants.ANIMATION_DURATION
 import com.esgi.todoapp.util.Constants.PADDING_LARGE
 import com.esgi.todoapp.util.Constants.PADDING_SMALL
 import java.text.SimpleDateFormat
@@ -36,7 +42,7 @@ import java.util.Locale
 
 /**
  * Composable for displaying a single task item in the task list.
- * Features animated color transitions based on completion status,
+ * Features enhanced animated color transitions based on completion status,
  * displays task details (title, description, creation date),
  * and provides buttons for completing and deleting tasks.
  * Accessibility is enhanced with semantic properties.
@@ -57,25 +63,41 @@ fun TaskItem(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (task.completed) TaskCompleted.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surface,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_SHORT),
+        targetValue = if (task.completed) MaterialTheme.colorScheme.surface.copy(alpha = 0.95f) else MaterialTheme.colorScheme.surface,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
         label = "background color"
     )
 
     val statusColor by animateColorAsState(
         targetValue = if (task.completed) TaskCompleted else TaskPending,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_SHORT),
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
         label = "status color"
+    )
+
+    val cardElevation by animateDpAsState(
+        targetValue = if (task.completed) 0.dp else 4.dp,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
+        label = "card elevation"
     )
 
     val dateFormatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
     val statusText = if (task.completed) "Tâche terminée" else "Tâche en cours"
     val taskContentDescription = "${task.title}. ${statusText}. Créée le ${dateFormatter.format(task.creationDate)}"
 
+    val scale by animateFloatAsState(
+        targetValue = if (task.completed) 1f else 1f,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
+        label = "card scale"
+    )
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = PADDING_SMALL.dp)
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
             .clickable(
                 role = Role.Button,
                 onClickLabel = "Voir les détails de la tâche ${task.title}"
@@ -88,7 +110,12 @@ fun TaskItem(
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = PADDING_SMALL.dp)
+        border = if (task.completed)
+            CardDefaults.outlinedCardBorder().copy(
+                width = 1.dp,
+            )
+        else null,
+        elevation = CardDefaults.cardElevation(defaultElevation = cardElevation)
     ) {
         Row(
             modifier = Modifier
@@ -96,14 +123,11 @@ fun TaskItem(
                 .padding(PADDING_LARGE.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(PADDING_LARGE.dp)
-                    .clip(RoundedCornerShape(PADDING_SMALL.dp))
-                    .background(statusColor)
-                    .semantics {
-                        contentDescription = statusText
-                    }
+            StatusBadge(
+                isCompleted = task.completed,
+                modifier = Modifier.semantics {
+                    contentDescription = statusText
+                }
             )
 
             Column(
@@ -117,7 +141,10 @@ fun TaskItem(
                     textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.semantics { heading() }
+                    modifier = Modifier.semantics { heading() },
+                    color = if (task.completed)
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    else MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(PADDING_SMALL.dp))
@@ -127,7 +154,9 @@ fun TaskItem(
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = if (task.completed) 0.4f else 0.7f
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(PADDING_SMALL.dp))
@@ -150,9 +179,10 @@ fun TaskItem(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        imageVector = if (task.completed) Icons.Default.CheckCircle else Icons.Default.Check,
                         contentDescription = null,
-                        tint = if (task.completed) TaskCompleted else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        tint = if (task.completed) TaskCompleted.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.scale(if (task.completed) 1.1f else 1f)
                     )
                 }
 

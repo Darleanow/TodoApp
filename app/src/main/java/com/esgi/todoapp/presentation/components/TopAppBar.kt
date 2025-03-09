@@ -38,17 +38,6 @@ fun TopAppBarTask(
         },
         actions = {
             IconButton(
-                onClick = onAddClick,
-                modifier = Modifier.semantics {
-                    contentDescription = "Ajouter une nouvelle tâche"
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            }
-            IconButton(
                 onClick = onClearAllClick,
                 modifier = Modifier.semantics {
                     contentDescription = "Supprimer toutes les tâches"

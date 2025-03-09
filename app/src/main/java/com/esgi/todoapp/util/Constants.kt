@@ -14,6 +14,7 @@ object Constants {
     const val PADDING_EXTRA_LARGE = 24
 
     // Animation durations
+    const val ANIMATION_DURATION = 500
     const val ANIMATION_DURATION_SHORT = 300
 
     // Task validation constraints
