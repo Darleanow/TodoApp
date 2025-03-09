@@ -53,7 +53,6 @@ import java.util.Locale
  * @param onDeleteClick Function to call when the delete button is clicked
  * @param modifier Modifier to be applied to the card
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(
     task: Task,
@@ -66,12 +65,6 @@ fun TaskItem(
         targetValue = if (task.completed) MaterialTheme.colorScheme.surface.copy(alpha = 0.95f) else MaterialTheme.colorScheme.surface,
         animationSpec = tween(durationMillis = ANIMATION_DURATION),
         label = "background color"
-    )
-
-    val statusColor by animateColorAsState(
-        targetValue = if (task.completed) TaskCompleted else TaskPending,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION),
-        label = "status color"
     )
 
     val cardElevation by animateDpAsState(

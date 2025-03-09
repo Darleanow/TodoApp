@@ -54,7 +54,6 @@ fun TaskList(
             items = sortedTasks,
             key = { _, task -> task.id }
         ) { index, task ->
-            // Calculate staggered animation delay based on index
             val animationDelay = index * 100
 
             AnimatedVisibility(

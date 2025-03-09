@@ -19,7 +19,6 @@ import com.esgi.todoapp.presentation.viewmodel.TaskViewModel
 import com.esgi.todoapp.util.Constants.PADDING_LARGE
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreen(
     viewModel: TaskViewModel = hiltViewModel()
@@ -74,7 +73,6 @@ fun TaskScreen(
     Scaffold(
         topBar = {
             TopAppBarTask(
-                onAddClick = viewModel::onAddTaskClick,
                 onClearAllClick = viewModel::deleteAllTasks,
                 taskCount = tasks.size
             )

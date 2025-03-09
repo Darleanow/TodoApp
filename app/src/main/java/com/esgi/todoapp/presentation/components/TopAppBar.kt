@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarTask(
-    onAddClick: () -> Unit,
     onClearAllClick: () -> Unit,
     taskCount: Int
 ) {

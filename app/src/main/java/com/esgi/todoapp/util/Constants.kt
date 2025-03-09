@@ -15,7 +15,6 @@ object Constants {
 
     // Animation durations
     const val ANIMATION_DURATION = 500
-    const val ANIMATION_DURATION_SHORT = 300
 
     // Task validation constraints
     const val MAX_TITLE_LENGTH = 50

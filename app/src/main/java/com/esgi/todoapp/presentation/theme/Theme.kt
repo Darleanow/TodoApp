@@ -52,7 +52,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun TodoAppEnzoHugonnierTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
